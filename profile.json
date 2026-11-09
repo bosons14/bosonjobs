@@ -1,0 +1,28 @@
+{
+ "queries": ["generative ai", "llm", "ai architect", "machine learning engineer", "gpu", "semiconductor ai"],
+ "title_terms": {
+  "ai architect": 45, "genai architect": 45, "generative ai": 38, "gen ai": 38, "genai": 38, "llm": 36,
+  "inference": 32, "agentic": 32, "applied ai": 32, "ai engineer": 30, "ml engineer": 28,
+  "machine learning": 28, "solutions architect": 18, "gpu": 36, "CUDA": 36, "HPC": 22,
+  "EDA": 36, "semiconductor": 28, "silicon": 22, "RTL": 22, "verification engineer": 18,
+  "mlops": 20, "rust": 16, "c++": 16, "compiler": 16, "technical trainer": 26,
+  "ai instructor": 26, "curriculum": 16, "developer advocate": 16
+ },
+ "skill_terms": {
+  "rag": 6, "vector database": 6, "langchain": 4, "pytorch": 6, "transformers": 4, "fine-tuning": 5,
+  "CUDA": 8, "gpu": 5, "vllm": 8, "python": 3, "c++": 4, "rust": 4, "kubernetes": 2, "aws": 2,
+  "electronic design automation": 10, "verilog": 8, "systemverilog": 8, "mcp": 4, "agents": 4
+ },
+ "skills_cap": 35,
+ "senior_words": ["senior", "\\bsr\\b", "staff", "principal", "lead", "architect", "head of", "director", "distinguished"],
+ "exclude_titles": ["intern", "internship", "junior", "fresher", "graduate", "sales", "account executive",
+  "recruiter", "evaluator", "rater", "linguist", "annotator", "artist"],
+ "min_score": 35,
+ "max_age_days": 45,
+ "disabled": [],
+ "companies": {
+  "greenhouse": ["anthropic", "databricks", "togetherai"],
+  "lever": ["mistral"],
+  "ashby": ["openai", "cohere", "perplexity"]
+ }
+}

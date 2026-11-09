@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BosonJobs</title>
+<link rel="icon" href="data:,">
+<style>
+:root {
+  --paper: #e6ece9; --sheet: #f6f8f6; --ink: #16302a; --soft: #4d645d; --line: #c3d0ca;
+  --marigold: #f4b52e; --teal: #0f6b5c; --plum: #7b2d5c;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "URW Palladio L", "P052", serif;
+  --sans: "Avenir Next", "Segoe UI", Candara, "Noto Sans", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 var(--sans); }
+a { color: var(--teal); }
+:focus-visible { outline: 3px solid var(--plum); outline-offset: 2px; }
+.page { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 48px; max-width: 1180px; margin: 0 auto; padding: 40px 28px 80px; }
+aside { position: sticky; top: 24px; align-self: start; }
+.brand { font: 600 19px var(--serif); margin: 0 0 24px; }
+fieldset { border: 0; padding: 0; margin: 0 0 22px; }
+legend, .field > span { font-weight: 600; font-size: 14px; padding: 0; margin-bottom: 6px; display: block; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 15px; padding: 2px 0; }
+input[type=search], select { width: 100%; font: inherit; color: inherit; padding: 7px 9px; border: 1px solid var(--line); background: var(--sheet); border-radius: 3px; }
+.field { display: block; margin-bottom: 22px; }
+.feeds { font-size: 13.5px; color: var(--soft); border-top: 1px solid var(--line); padding-top: 14px; }
+.feeds summary { cursor: pointer; }
+.feeds ul { list-style: none; padding: 0; margin: 8px 0 0; }
+.feeds .bad { color: var(--plum); }
+h1 { font: 500 clamp(44px, 7vw, 84px)/1 var(--serif); letter-spacing: -.02em; margin: 0 0 8px; }
+.sub { color: var(--soft); margin: 0 0 36px; max-width: 62ch; }
+.job { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 4px 18px; padding: 22px 0; border-top: 1px solid var(--line); }
+.score { font: 500 38px/1 var(--serif); }
+.score small { display: block; font: 12.5px/1.3 var(--sans); color: var(--soft); margin-top: 4px; }
+.job h2 { font: 500 23px/1.2 var(--serif); margin: 0 0 3px; }
+.meta { color: var(--soft); font-size: 15px; margin: 0; }
+.flag { display: inline-block; font-size: 13px; font-weight: 600; padding: 1px 8px; border-radius: 2px; margin: 8px 8px 0 0; }
+.flag.india { background: var(--marigold); }
+.flag.worldwide { background: var(--teal); color: #fff; }
+.flag.unclear { background: var(--plum); color: #fff; }
+.flag.new { outline: 1px solid var(--ink); }
+.why { font-size: 14.5px; margin: 8px 0 0; color: var(--soft); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+.apply { background: var(--ink); color: var(--sheet); padding: 6px 16px; border-radius: 3px; font-weight: 600; text-decoration: none; }
+.actions select { width: auto; padding: 5px 7px; font-size: 14.5px; }
+button { font: inherit; font-size: 14.5px; background: none; border: 1px solid var(--line); color: var(--ink); padding: 5px 11px; border-radius: 3px; cursor: pointer; }
+button:hover { border-color: var(--ink); }
+.detail { margin-top: 14px; background: var(--sheet); padding: 16px 20px; }
+.detail p { white-space: pre-line; max-width: 72ch; margin: 0 0 12px; font-size: 15px; }
+.credit { font-size: 13.5px; color: var(--soft); }
+.empty { border-top: 1px solid var(--line); padding: 28px 0; max-width: 60ch; }
+.empty code { background: var(--sheet); padding: 2px 6px; }
+.more { margin: 26px 0; }
+.status { position: fixed; right: 20px; bottom: 20px; background: var(--ink); color: var(--sheet); padding: 8px 14px; border-radius: 3px; font-size: 14.5px; }
+.status[hidden] { display: none; }
+@media (max-width: 820px) {
+  .page { grid-template-columns: 1fr; gap: 26px; padding: 24px 18px 60px; }
+  aside { position: static; }
+  .job { grid-template-columns: 54px minmax(0, 1fr); }
+  .score { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <aside>
+    <p class="brand">BosonJobs</p>
+    <label class="field"><span>Search</span><input id="q" type="search" placeholder="Title, company or skill"></label>
+    <label class="field"><span>Show</span>
+      <select id="view">
+        <option value="todo">To review</option>
+        <option value="saved">Saved</option>
+        <option value="tailoring">Tailoring</option>
+        <option value="applied">Applied</option>
+        <option value="interview">Interview</option>
+        <option value="offer">Offer</option>
+        <option value="rejected">Rejected</option>
+        <option value="skipped">Skipped</option>
+        <option value="all">All jobs</option>
+      </select>
+    </label>
+    <fieldset id="elig">
+      <legend>Open to you</legend>
+      <label class="check"><input type="checkbox" value="india" checked> Names India or Asia</label>
+      <label class="check"><input type="checkbox" value="worldwide" checked> Worldwide</label>
+      <label class="check"><input type="checkbox" value="unclear" checked> Check the posting</label>
+    </fieldset>
+    <label class="check" style="margin-bottom:22px"><input id="fresh" type="checkbox"> Added in the last 3 days</label>
+    <details class="feeds" id="feeds"></details>
+  </aside>
+  <main>
+    <h1 id="count">Loading</h1>
+    <p class="sub" id="sub"></p>
+    <div id="list"></div>
+  </main>
+</div>
+<div class="status" id="status" role="status" hidden></div>
+<script>
+const PAGE = 60, DAY = 86400;
+const ELIG = { india: "Names India or Asia", worldwide: "Worldwide", unclear: "Check the posting" };
+let data = { jobs: [], tracker: {}, statuses: [], sources: {}, board_home: {}, generated: 0 }, limit = PAGE;
+const $ = id => document.getElementById(id);
+function el(tag, props = {}, ...kids) {
+  const node = Object.assign(document.createElement(tag), props);
+  node.append(...kids.filter(k => k !== null && k !== undefined));
+  return node;
+}
+const statusOf = j => (data.tracker[j.id] || {}).status || "new";
+const now = () => Date.now() / 1000;
+function age(t) {
+  if (!t) return "date not given";
+  const d = Math.floor((now() - t) / DAY);
+  return d <= 0 ? "today" : d === 1 ? "1 day ago" : d + " days ago";
+}
+function say(msg) {
+  const s = $("status"); s.textContent = msg; s.hidden = false;
+  clearTimeout(say.t); say.t = setTimeout(() => s.hidden = true, 2400);
+}
+function visible() {
+  const q = $("q").value.trim().toLowerCase(), view = $("view").value;
+  const allowed = [...$("elig").querySelectorAll("input:checked")].map(i => i.value);
+  return data.jobs.filter(j => {
+    const st = statusOf(j);
+    if (view === "todo" ? !["new", "saved"].includes(st) : view !== "all" && st !== view) return false;
+    if (!allowed.includes(j.eligibility)) return false;
+    if ($("fresh").checked && now() - j.first_seen > 3 * DAY) return false;
+    return !q || [j.title, j.company, j.tags.join(" "), j.text].join(" ").toLowerCase().includes(q);
+  });
+}
+async function track(job, status) {
+  const res = await fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: job.id, status }) });
+  if (!res.ok) { say("Status not saved. Is the BosonJobs server still running?"); return; }
+  data.tracker[job.id] = await res.json();
+  say("Marked " + status);
+}
+function card(j) {
+  const flags = el("div", {}, el("span", { className: "flag " + j.eligibility, textContent: ELIG[j.eligibility], title: j.eligibility_note || "" }));
+  if (now() - j.first_seen < 3 * DAY) flags.append(el("span", { className: "flag new", textContent: "New" }));
+  const pick = el("select", { ariaLabel: "Status for " + j.title });
+  data.statuses.forEach(s => pick.append(el("option", { value: s, textContent: s[0].toUpperCase() + s.slice(1), selected: s === statusOf(j) })));
+  pick.onchange = () => track(j, pick.value);
+  const copy = el("button", { type: "button", textContent: "Copy request for Claude", onclick: async () => {
+    try { await navigator.clipboard.writeText("/bosonjobs:apply " + j.id); say("Copied. Paste it into Claude Code."); }
+    catch { say("Copy blocked. Type: /bosonjobs:apply " + j.id); }
+  } });
+  const more = el("button", { type: "button", textContent: "Read posting", ariaExpanded: "false" });
+  const body = el("div");
+  more.onclick = () => {
+    if (body.firstChild) { body.replaceChildren(); more.textContent = "Read posting"; more.ariaExpanded = "false"; return; }
+    const credit = el("p", { className: "credit" }, "Listed on ");
+    j.listings.forEach((l, i) => { if (i) credit.append(", "); credit.append(el("a", { href: l.url, target: "_blank", rel: "noopener", textContent: l.source })); });
+    const note = j.eligibility_note ? el("p", { textContent: j.eligibility_note + ". Confirm before applying." }) : null;
+    body.replaceChildren(el("div", { className: "detail" }, note, el("p", { textContent: j.text || "No description in the feed. Open the posting to read it." }), credit));
+    more.textContent = "Hide posting"; more.ariaExpanded = "true";
+  };
+  const line = [j.company, j.location || "Remote", j.kind, j.salary, age(j.posted)].filter(Boolean).join(", ");
+  return el("article", { className: "job" },
+    el("div", { className: "score" }, String(j.score), el("small", { textContent: "match" })),
+    el("div", {},
+      el("h2", { textContent: j.title }),
+      el("p", { className: "meta", textContent: line }),
+      flags,
+      j.why.length ? el("p", { className: "why", textContent: "Matches " + j.why.join(", ") }) : null,
+      el("div", { className: "actions" }, el("a", { className: "apply", href: j.apply_url, target: "_blank", rel: "noopener", textContent: "Apply" }), pick, more, copy),
+      body));
+}
+function render() {
+  const rows = visible();
+  $("count").textContent = rows.length === 1 ? "1 job" : rows.length.toLocaleString() + " jobs";
+  $("sub").textContent = data.generated ? "Remote roles ranked against your profile. Feed refreshed " + age(data.generated) + "." : "";
+  const list = $("list"); list.replaceChildren();
+  if (!data.generated) {
+    list.append(el("div", { className: "empty" }, "No jobs yet. Run ", el("code", { textContent: "python3 bosonjobs.py fetch" }), ", then reload this page."));
+  } else if (!rows.length) {
+    list.append(el("div", { className: "empty", textContent: "Nothing matches these filters. Clear the search or switch Show to All jobs." }));
+  }
+  rows.slice(0, limit).forEach(j => list.append(card(j)));
+  if (rows.length > limit) list.append(el("div", { className: "more" }, el("button", { type: "button", textContent: "Show " + Math.min(PAGE, rows.length - limit) + " more", onclick: () => { limit += PAGE; render(); } })));
+}
+function renderFeeds() {
+  const entries = Object.entries(data.sources).sort();
+  const bad = entries.filter(([, v]) => v.error);
+  const ul = el("ul");
+  entries.forEach(([name, v]) => ul.append(el("li", { className: v.error ? "bad" : "", title: v.error || "", textContent: name + (v.error ? ": failed" : ": " + v.count) })));
+  $("feeds").replaceChildren(el("summary", { textContent: entries.length - bad.length + " of " + entries.length + " feeds working" }), ul);
+}
+["q", "view", "fresh"].forEach(id => $(id).addEventListener("input", () => { limit = PAGE; render(); }));
+$("elig").addEventListener("change", () => { limit = PAGE; render(); });
+fetch("/api/data").then(r => r.json()).then(d => { data = d; renderFeeds(); render(); })
+  .catch(() => { $("count").textContent = "Server not reachable"; $("sub").textContent = "Start it with: python3 bosonjobs.py serve"; });
+</script>
+</body>
+</html>

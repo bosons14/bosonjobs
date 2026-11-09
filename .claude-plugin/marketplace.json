@@ -1,0 +1,11 @@
+{
+  "name": "bosonjobs",
+  "owner": { "name": "Subhendra Basu" },
+  "plugins": [
+    {
+      "name": "bosonjobs",
+      "source": "./",
+      "description": "Private feed of remote jobs open to candidates in India, with fit ranking, tailored applications and a tracker."
+    }
+  ]
+}

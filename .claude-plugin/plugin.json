@@ -1,0 +1,7 @@
+{
+  "name": "bosonjobs",
+  "version": "0.1.0",
+  "description": "Private feed of remote jobs open to candidates in India, with fit ranking, tailored applications and a tracker.",
+  "author": { "name": "Subhendra Basu" },
+  "license": "MIT"
+}
